@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coleideando - Generador Multi-Página Pro con Portada</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Coleideando Studio — Generador Curricular Adaptativo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -24,6 +24,7 @@
     </script>
 
     <style>
+        /* --- ESTILOS BASE PARA ESCRITORIO --- */
         .worksheet-preview {
             width: 794px;
             height: 1123px;
@@ -56,7 +57,7 @@
 
         .page-content-area {
             flex-grow: 1;
-            max-height: 780px; /* Límite estricto para que no se corten las actividades */
+            max-height: 780px; 
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -72,6 +73,58 @@
         .bg-grid-dots { background-image: radial-gradient(#d1d5db 1.5px, transparent 1.5px); background-size: 16px 16px; }
         .bg-lines { background-image: linear-gradient(#e2e8f0 1px, transparent 1px); background-size: 100% 24px; }
 
+        /* --- DETECCIÓN AUTOMÁTICA DE MÓVIL (PANTALLAS INTERIORES A 1024px) --- */
+        @media (max-width: 1024px) {
+            body {
+                flex-direction: column !important;
+                overflow-y: auto !important;
+                height: auto !important;
+            }
+            aside {
+                width: 100% !important;
+                height: auto !important;
+                max-height: 50vh;
+                border-r-0 !important;
+                border-bottom: 4px solid black !important;
+            }
+            main {
+                width: 100% !important;
+                height: auto !important;
+                padding: 12px !important;
+                overflow-x: hidden !important;
+                background-color: #e5e7eb !important;
+            }
+            #capture-area {
+                width: 100% !important;
+                align-items: center !important;
+                gap: 16px !important;
+            }
+            /* Escalado inteligente para que la ficha mantenga proporciones A4 exactas en pantallas de smartphone */
+            .worksheet-preview {
+                width: 794px !important;
+                height: 1123px !important;
+                zoom: 0.45; /* Escala visual uniforme conservando las fuentes */
+                -moz-transform: scale(0.45);
+                -moz-transform-origin: top center;
+                box-shadow: 6px 6px 0px 0px rgba(0,0,0,1) !important;
+                margin-bottom: 0px !important;
+            }
+            /* Ajuste específico para pantallas ultra estrechas */
+            @media (max-width: 400px) {
+                .worksheet-preview {
+                    zoom: 0.38;
+                    -moz-transform: scale(0.38);
+                }
+            }
+        }
+
+        /* Variables de colores dinámicos */
+        .theme-azul { --primary: #8cb1dc; --bg-cover: #e8f4fd; --lollipop-inner: #ff9aa2; }
+        .theme-verde { --primary: #22c55e; --bg-cover: #f0fdf4; --lollipop-inner: #fcd34d; }
+        .theme-rosa { --primary: #ff9aa2; --bg-cover: #fff5f6; --lollipop-inner: #ffdac1; }
+        .theme-naranja { --primary: #f59e0b; --bg-cover: #fffbeb; --lollipop-inner: #db2777; }
+
+        /* CONFIGURACIÓN DE IMPRESIÓN PROFESIONAL */
         @page {
             size: A4 portrait;
             margin: 0 !important;
@@ -94,54 +147,44 @@
                 padding: 0 !important;
                 margin: 0 !important;
                 background: transparent !important;
-                overflow: visible !important;
                 display: block !important;
                 width: 100% !important;
-                height: auto !important;
             }
 
             #capture-area {
                 display: block !important;
-                gap: 0 !important;
             }
 
             .worksheet-preview {
                 width: 210mm !important;  
                 height: 297mm !important;
+                zoom: 1 !important; /* Desactiva el escalado móvil al imprimir */
+                -moz-transform: none !important;
                 border: none !important;  
                 box-shadow: none !important;
                 margin: 0 !important;
-                padding: 10mm !important; 
+                padding: 12mm !important; 
                 page-break-inside: avoid !important;
                 page-break-after: always !important;
                 break-after: page !important;
                 display: flex !important;
-                overflow: hidden !important;
             }
-
-            .cover-page {
-                border: 8mm solid var(--primary) !important;
-            }
+            .cover-page { border: 8mm solid var(--primary) !important; }
         }
-
-        .theme-azul { --primary: #8cb1dc; --bg-cover: #e8f4fd; --lollipop-inner: #ff9aa2; }
-        .theme-verde { --primary: #22c55e; --bg-cover: #f0fdf4; --lollipop-inner: #fcd34d; }
-        .theme-rosa { --primary: #ff9aa2; --bg-cover: #fff5f6; --lollipop-inner: #ffdac1; }
-        .theme-naranja { --primary: #f59e0b; --bg-cover: #fffbeb; --lollipop-inner: #db2777; }
     </style>
 </head>
 <body class="bg-gray-800 font-body flex h-screen overflow-hidden">
 
     <aside class="w-2/5 bg-white shadow-2xl h-full overflow-y-auto p-6 no-print z-10 border-r-4 border-black">
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center justify-between mb-6 gap-2">
             <div class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white">
+                <div class="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white flex-shrink-0">
                     <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
                 </div>
-                <h1 class="font-fredoka text-xl uppercase italic">Coleideando Studio</h1>
+                <h1 class="font-fredoka text-lg md:text-xl uppercase italic tracking-tight">Coleideando Studio</h1>
             </div>
-            <button onclick="window.print()" class="bg-green-500 text-white font-fredoka py-2 px-4 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black hover:translate-y-0.5 hover:shadow-none transition-all uppercase tracking-wider text-xs">
-                <i class="fa-solid fa-print mr-1"></i> Imprimir PDF
+            <button onclick="window.print()" class="bg-green-500 text-white font-fredoka py-2 px-3 md:px-4 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black hover:translate-y-0.5 hover:shadow-none transition-all uppercase tracking-wider text-xs flex-shrink-0">
+                <i class="fa-solid fa-print mr-1"></i> PDF
             </button>
         </div>
 
@@ -149,39 +192,39 @@
             <section class="bg-purple-100 p-4 rounded-xl border-2 border-black space-y-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                 <div class="flex items-center gap-2 text-purple-950 font-fredoka text-xs uppercase tracking-wider">
                     <i class="fa-solid fa-brain"></i>
-                    <span>Generador Curricular Dinámico</span>
+                    <span>Configuración Curricular</span>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <div>
                         <label class="block text-[9px] font-bold text-purple-950 uppercase mb-1">Nivel Educativo</label>
-                        <select id="sel-nivel" onchange="actualizarContenidos()" class="w-full border-2 border-black p-1 rounded-lg text-[11px] font-bold bg-white cursor-pointer">
+                        <select id="sel-nivel" onchange="actualizarContenidos()" class="w-full border-2 border-black p-1.5 rounded-lg text-[11px] font-bold bg-white cursor-pointer">
                             <option value="1-2-primaria">1º y 2º de Primaria</option>
                             <option value="3-4-primaria">3º y 4º de Primaria</option>
+                            <option value="5-6-primaria">5º y 6º de Primaria</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[9px] font-bold text-purple-950 uppercase mb-1">Contenido Curricular</label>
-                        <select id="sel-contenido" class="w-full border-2 border-black p-1 rounded-lg text-[11px] font-bold bg-white cursor-pointer">
-                            </select>
+                        <label class="block text-[9px] font-bold text-purple-950 uppercase mb-1">Contenido</label>
+                        <select id="sel-contenido" class="w-full border-2 border-black p-1.5 rounded-lg text-[11px] font-bold bg-white cursor-pointer"></select>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-[9px] font-bold text-purple-950 uppercase mb-1">Temática del Proyecto</label>
+                    <label class="block text-[9px] font-bold text-purple-950 uppercase mb-1">Temática General del Centro</label>
                     <select id="sel-tematica" class="w-full border-2 border-black p-1.5 rounded-lg text-xs font-bold bg-white cursor-pointer">
                         <option value="piratas">🏴‍☠️ Piratas y Corsarios</option>
                         <option value="espacio">🚀 Astronautas y Galaxias</option>
                     </select>
                 </div>
 
-                <button onclick="aplicarPlantillaTematica()" class="w-full bg-purple-600 text-white font-fredoka py-2 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 hover:shadow-none transition-all text-xs uppercase tracking-wide">
-                    ✨ Generar Ficha Completa
+                <button onclick="aplicarPlantillaTematica()" class="w-full bg-purple-600 text-white font-fredoka py-2.5 rounded-lg border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-0.5 hover:shadow-none transition-all text-xs uppercase tracking-wide">
+                    ✨ Generar Cuaderno Temático
                 </button>
             </section>
 
             <section class="bg-gray-50 p-3 rounded-xl border-2 border-black">
-                <label class="block font-bold text-gray-700 mb-1 uppercase text-[10px] tracking-widest">Tema del documento</label>
+                <label class="block font-bold text-gray-700 mb-1 uppercase text-[10px] tracking-widest">Gama de Color Visual</label>
                 <div class="grid grid-cols-4 gap-2">
                     <button onclick="changeTheme('azul')" class="h-6 bg-[#8cb1dc] rounded-full border-2 border-black"></button>
                     <button onclick="changeTheme('verde')" class="h-6 bg-green-500 rounded-full border-2 border-black"></button>
@@ -192,25 +235,25 @@
 
             <section class="bg-gray-50 p-3 rounded-xl border-2 border-black space-y-2">
                 <div class="flex items-center justify-between">
-                    <label class="block font-bold text-gray-700 text-[10px] tracking-widest uppercase">Personalización de Portada</label>
+                    <label class="block font-bold text-gray-700 text-[10px] tracking-widest uppercase">Ajustes de Portada</label>
                     <div class="flex items-center gap-1.5">
                         <span class="text-[10px] font-bold text-gray-500 uppercase">Incluir</span>
                         <input type="checkbox" id="in-incluir-portada" onchange="togglePortada(this.checked)" checked class="w-4 h-4 accent-black cursor-pointer">
                     </div>
                 </div>
-                <input type="text" id="in-portada-titulo" oninput="updateHeader()" class="w-full border-2 border-black p-1.5 rounded-lg font-fredoka text-sm uppercase tracking-wide" value="">
+                <input type="text" id="in-portada-titulo" oninput="updateHeader()" class="w-full border-2 border-black p-1.5 rounded-lg font-fredoka text-sm uppercase tracking-wide">
             </section>
 
             <section class="bg-gray-50 p-3 rounded-xl border-2 border-black space-y-2">
-                <label class="block font-bold text-gray-700 text-[10px] tracking-widest uppercase">Estructura Global de Cabecera</label>
-                <input type="text" id="in-titulo" oninput="updateHeader()" class="w-full border-2 border-black p-1.5 rounded-lg font-hand text-base" value="">
-                <input type="text" id="in-subtitulo" oninput="updateHeader()" class="w-full border-2 border-black p-1.5 rounded-lg font-display text-base" value="">
+                <label class="block font-bold text-gray-700 text-[10px] tracking-widest uppercase">Títulos del Encabezado (Págs interiores)</label>
+                <input type="text" id="in-titulo" oninput="updateHeader()" class="w-full border-2 border-black p-1.5 rounded-lg font-hand text-base">
+                <input type="text" id="in-subtitulo" oninput="updateHeader()" class="w-full border-2 border-black p-1.5 rounded-lg font-display text-base">
             </section>
 
             <div id="editor-blocks-container" class="space-y-4"></div>
 
             <section class="p-4 bg-purple-50 border-2 border-dashed border-black rounded-xl text-center">
-                <p class="font-bold text-xs uppercase tracking-wider mb-3 text-purple-900">Añadir Actividad Temática Coherente</p>
+                <p class="font-bold text-xs uppercase tracking-wider mb-3 text-purple-900">Añadir Actividad Extra Manual</p>
                 <div class="grid grid-cols-3 gap-2 mb-2">
                     <button onclick="addBlockData('learn')" class="bg-amber-100 border-2 border-black p-2 rounded-lg font-hand text-xs font-bold hover:bg-amber-200 transition-colors">+ Teoría</button>
                     <button onclick="addBlockData('order')" class="bg-pink-100 border-2 border-black p-2 rounded-lg font-hand text-xs font-bold hover:bg-pink-200 transition-colors">+ Ordenar</button>
@@ -230,6 +273,7 @@
     </main>
 
     <script>
+        // ASIGNACIÓN CURRICULAR OFICIAL POR ETAPAS
         const contenidosPorNivel = {
             '1-2-primaria': [
                 {val: 'sustantivos', text: 'Sustantivos (Nombres)'},
@@ -250,6 +294,15 @@
                 {val: 'clases_sustantivos', text: 'Clases de Sustantivos (Común/Propio...)'},
                 {val: 'determinantes_avanzados', text: 'Determinantes Demost. y Posesivos'},
                 {val: 'tiempos_verbales', text: 'Tiempos Verbales Avanzados'}
+            ],
+            '5-6-primaria': [
+                {val: 'grados_adjetivo', text: 'Grados del Adjetivo'},
+                {val: 'adverbios_preposiciones', text: 'Adverbios y Preposiciones'},
+                {val: 'analisis_morfologico', text: 'Análisis Morfológico'},
+                {val: 'sintaxis_basica', text: 'Sintaxis Básica (CD, CI, CC)'},
+                {val: 'prefijos_sufijos', text: 'Prefijos y Sufijos (Avanzados)'},
+                {val: 'reglas_acentuacion_especiales', text: 'Tilde Diacrítica e Hiatos'},
+                {val: 'figuras_literarias', text: 'Figuras Literarias Básicas'}
             ]
         };
 
@@ -266,7 +319,7 @@
             });
         }
 
-        // BASE DE DATOS MASIVA 100% REAL - SIN EJEMPLOS FALSOS
+        // BANCO DE DATOS INTEGRAL COMPLETO SIN RESPUESTAS CORRELATIVAS NI PISTAS DIDÁCTICAS
         const infoTematica = {
             // ========================= 1º Y 2º PRIMARIA =========================
             sustantivos: {
@@ -275,8 +328,8 @@
                     blocks: [
                         { id: 1, type: 'learn', content: '¡Hola, grumete! Los sustantivos son palabras mágicas que sirven para nombrar a personas, animales, lugares y objetos de nuestro mundo pirata.' },
                         { id: 2, type: 'boxes', question: 'Clasifica estos nombres en su cofre correspondiente:', words: 'catalejo, Garrapata, tiburón, calavera, pirata, isla', label1: 'LUGAR / PERSONA', label2: 'ANIMALES', label3: 'OBJETOS' },
-                        { id: 3, type: 'connect', question: 'Une cada tripulante con el sustantivo que busca:', left1: 'El capitán busca su', right1: 'brújula.', left2: 'El cocinero limpia el', right2: 'caldero.', left3: 'El grumete sube al', right3: 'mástil.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: pirata, barco, isla', text: 'El malvado [HUECO] Pata de Palo abordó el [HUECO] por la noche. Buscaba un mapa secreto para encontrar la [HUECO] escondida.' },
+                        { id: 3, type: 'connect', question: 'Une cada tripulante con el sustantivo que busca de forma correcta:', left1: 'El capitán busca su', right1: 'mástil.', left2: 'El cocinero limpia el', right2: 'brújula.', left3: 'El grumete sube al', right3: 'caldero.' },
+                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras de la lista sin repetir: isla, barco, pirata', text: 'El malvado [HUECO] Pata de Palo abordó el [HUECO] por la noche. Buscaba un mapa secreto para encontrar la [HUECO] escondida.' },
                         { id: 5, type: 'order', question: 'Ordena de menor a mayor cantidad de sustantivos estas ideas:', lines: ['Tres loros verdes volando en el cielo', 'Un mapa arrugado', 'El timonel maneja dos barcos grandes'] },
                         { id: 6, type: 'drawing', question: 'Dibuja un sustantivo de persona en el recuadro de puntos y uno de objeto en las líneas:' }
                     ]
@@ -286,8 +339,8 @@
                     blocks: [
                         { id: 1, type: 'learn', content: '¡Atención, astronauta! Los sustantivos son palabras que usamos para nombrar todo lo que existe: personas, animales, lugares y cosas.' },
                         { id: 2, type: 'boxes', question: 'Clasifica estos sustantivos espaciales en sus estaciones orbitales:', words: 'Marte, meteorito, satélite, astronauta, estrella, robot', label1: 'LUGAR / PERSONA', label2: 'SERES VIVOS', label3: 'OBJETOS' },
-                        { id: 3, type: 'connect', question: 'Une cada elemento galáctico con su descripción correcta:', left1: 'El cohete viaja a la', right1: 'Luna.', left2: 'El astrónomo mira por el', right2: 'telescopio.', left3: 'El alienígena conduce su', right3: 'ovni.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: comandante, cohete, planeta', text: 'La valiente [HUECO] Valentina encendió los motores del [HUECO]. Al mirar por la ventana gigante, descubrió un nuevo [HUECO] brillante.' },
+                        { id: 3, type: 'connect', question: 'Une cada elemento galáctico con su descripción correcta:', left1: 'El cohete viaja a la', right1: 'telescopio.', left2: 'El astrónomo mira por el', right2: 'ovni.', left3: 'El alienígena conduce su', right3: 'Luna.' },
+                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de la lista: planeta, comandante, cohete', text: 'La valiente [HUECO] Valentina encendió los motores del [HUECO]. Al mirar por la ventana gigante, descubrió un nuevo [HUECO] brillante.' },
                         { id: 5, type: 'order', question: 'Ordena los elementos espaciales según su tamaño real de menor a mayor:', lines: ['Un gran asteroide rocoso', 'Un tornillo suelto del traje espacial', 'El gigantesco planeta Júpiter'] },
                         { id: 6, type: 'drawing', question: 'Dibuja un sustantivo de lugar galáctico a la izquierda y un objeto técnico a la derecha:' }
                     ]
@@ -299,8 +352,8 @@
                     blocks: [
                         { id: 1, type: 'learn', content: '¡Arrr! Los verbos son las palabras mágicas que indican lo que hacen los piratas: acciones como navegar, excavar, luchar o cantar.' },
                         { id: 2, type: 'boxes', question: '¿Cuándo ocurre la acción? Clasifica estos verbos corsarios:', words: 'navegué, busco, abordaremos, canté, nado, excavaremos', label1: 'PASADO (Ayer)', label2: 'PRESENTE (Ahora)', label3: 'FUTURO (Después)' },
-                        { id: 3, type: 'connect', question: 'Une cada personaje con el verbo de la acción que realiza:', left1: 'El loro verde prefiere', right1: 'volar.', left2: 'El vigía no para de', right2: 'observar.', left3: 'El capitán sabe cómo', right3: 'gobernar.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: navegar, buscar, nadar', text: 'Nos encanta [HUECO] por el océano azul y [HUECO] cofres de oro. Si aparece un tiburón, nos ponemos a [HUECO] muy veloz hacia la orilla.' },
+                        { id: 3, type: 'connect', question: 'Une cada personaje con el verbo de la acción que realiza:', left1: 'El loro verde prefiere', right1: 'observar.', left2: 'El vigía no para de', right2: 'gobernar.', left3: 'El capitán sabe cómo', right3: 'volar.' },
+                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras de la lista de forma lógica: nadar, navegar, buscar', text: 'Nos encanta [HUECO] por el océano azul y [HUECO] cofres de oro. Si aparece un tiburón, nos ponemos a [HUECO] muy veloz hacia la orilla.' },
                         { id: 5, type: 'order', question: 'Ordena las acciones piratas según ocurren en el tiempo cronológico:', lines: ['Abriremos el cofre del tesoro', 'Enterramos las monedas ayer por la tarde', 'Ahora mismo limpiamos la cubierta del barco'] },
                         { id: 6, type: 'drawing', question: 'Dibuja una acción de movimiento a la izquierda y una acción silenciosa a la derecha:' }
                     ]
@@ -310,178 +363,10 @@
                     blocks: [
                         { id: 1, type: 'learn', content: '¡Motores listos! Los verbos son las palabras que indican lo que hacen los astronautas y los astros: acciones como despegar, flotar, brillar o explorar.' },
                         { id: 2, type: 'boxes', question: 'Clasifica los tiempos verbales en la computadora central:', words: 'viajé, exploro, despegaré, descubrí, floto, orbitaré', label1: 'PASADO', label2: 'PRESENTE', label3: 'FUTURO' },
-                        { id: 3, type: 'connect', question: 'Une cada elemento espacial con el verbo que mejor le corresponde:', left1: 'Las estrellas lejanas saben', right1: 'brillar.', left2: 'Los satélites se dedican a', right2: 'orbitar.', left3: 'Los valientes tripulantes van a', right3: 'explorar.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: aterrizar, recolectar, regresar', text: 'El equipo consiguió [HUECO] en la superficie lunar. Mañana van a [HUECO] muestras de rocas y finalmente esperan [HUECO] a la Tierra.' },
+                        { id: 3, type: 'connect', question: 'Une cada elemento espacial con el verbo que mejor le corresponde:', left1: 'Las estrellas lejanas saben', right1: 'orbitar.', left2: 'Los satélites se dedican a', right2: 'explorar.', left3: 'Los valientes tripulantes van a', right3: 'brillar.' },
+                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras de la lista: recolectar, regresar, aterrizar', text: 'El equipo consiguió [HUECO] en la superficie lunar. Mañana van a [HUECO] muestras de rocas y finalmente esperan [HUECO] a la Tierra.' },
                         { id: 5, type: 'order', question: 'Ordena los pasos lógicos de una misión espacial de principio a fin:', lines: ['Orbitar el planeta lejano', 'Despegar desde la plataforma central', 'Aterrizar de regreso en casa'] },
                         { id: 6, type: 'drawing', question: 'Dibuja la acción de despegar en la zona de cuadrícula y la acción de flotar en las líneas:' }
-                    ]
-                }
-            },
-            adjetivos: {
-                piratas: {
-                    titulo: '¡Qué aspecto tiene un pirata!', subtitulo: 'Describiendo con Adjetivos', portada: 'ADJETIVOS PIRATAS', theme: 'rosa',
-                    blocks: [
-                        { id: 1, type: 'learn', content: '¡Fíjate bien! Los adjetivos son palabras que nos dicen cómo son o cómo están las personas, animales u objetos (barco grande, isla peligrosa).' },
-                        { id: 2, type: 'boxes', question: 'Clasifica los adjetivos según describan al barco o al capitán:', words: 'gigante, barbudo, rápido, valiente, viejo, enfadado', label1: 'EL CAPITÁN ES...', label2: 'EL BARCO ES...', label3: 'AMBOS PUEDEN SER' },
-                        { id: 3, type: 'connect', question: 'Une cada sustantivo con el adjetivo que mejor le pegue:', left1: 'Un cofre del tesoro', right1: 'pesado.', left2: 'Una espada pirata', right2: 'afilada.', left3: 'Un mar en tormenta', right3: 'bravo.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: oscuro, viejo, enorme', text: 'El pirata Pompón lleva un sombrero [HUECO]. Tiene una pata de palo muy [HUECO] y navega feliz en un barco [HUECO].' },
-                        { id: 5, type: 'order', question: 'Ordena de más peligroso a menos peligroso según el adjetivo utilizado:', lines: ['Un tiburón hambriento y gigante', 'Un loro verde y tranquilo', 'Un pirata furioso con espada'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja un mar tranquilo a la izquierda y un barco destruido a la derecha usando las pistas:' }
-                    ]
-                },
-                espacio: {
-                    titulo: 'El Universo de las Cualidades', subtitulo: 'Orbitando los Adjetivos', portada: 'ADJETIVOS EN ÓRBITA', theme: 'naranja',
-                    blocks: [
-                        { id: 1, type: 'learn', content: '¡Inspección visual! Los adjetivos espaciales nos ayudan a explicar cómo son los planetas, estrellas o trajes (planeta rojo, espacio oscuro).' },
-                        { id: 2, type: 'boxes', question: 'Clasifica los adjetivos en sus cajones galácticos:', words: 'brillante, lejano, helado, rocoso, caluroso, enorme', label1: 'ESTRELLAS', label2: 'PLANETAS', label3: 'AMBOS ELEMENTOS' },
-                        { id: 3, type: 'connect', question: 'Une cada sustantivo con su cualidad espacial más lógica:', left1: 'El sol es una estrella', right1: 'ardiente.', left2: 'El traje espacial es', right2: 'blanco.', left3: 'La galaxia es', right3: 'inmensa.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: misterioso, brillantes, violeta', text: 'Hemos aterrizado en un planeta [HUECO]. Sus lunas son [HUECO] y tiene una atmósfera de color [HUECO] muy extraña.' },
-                        { id: 5, type: 'order', question: 'Ordena las frases de mayor a menor luminosidad:', lines: ['Una estrella brillante y radiante', 'El espacio oscuro y negro', 'Un meteorito apagado'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja un marciano simpático en el área izquierda y una nave veloz en el área derecha:' }
-                    ]
-                }
-            },
-            articulos: {
-                piratas: {
-                    titulo: 'Los Guardianes del Nombre', subtitulo: 'Los Artículos y Determinantes', portada: 'ARTÍCULOS A BORDO', theme: 'azul',
-                    blocks: [
-                        { id: 1, type: 'learn', content: 'Los artículos son pequeñas palabras que van delante de los sustantivos para presentarlos. Pueden ser determinados o indeterminados.' },
-                        { id: 2, type: 'boxes', question: 'Clasifica estos artículos según su cantidad (Número):', words: 'el, las, un, unos, la, los, unas, una', label1: 'SINGULAR (Uno)', label2: 'PLURAL (Varios)', label3: 'DETERMINADOS' },
-                        { id: 3, type: 'connect', question: 'Une cada artículo con su sustantivo pirata correcto:', left1: 'El artículo "La"', right1: 'isla.', left2: 'El artículo "Los"', right2: 'loros.', left3: 'El artículo "Un"', right3: 'catalejo.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: unas, un, las', text: 'Ayer encontramos [HUECO] monedas de oro dentro de [HUECO] cofre mágico que estaba escondido bajo [HUECO] palmeras.' },
-                        { id: 5, type: 'order', question: 'Ordena las opciones de menor a mayor cantidad de elementos indicados por el determinante:', lines: ['Unas olas gigantescas en la costa', 'El mapa del tesoro escondido', 'Unos cuantos marineros cansados'] },
-                        { id: 6, type: 'drawing', question: 'Representa con un dibujo la diferencia entre "El loro" y "Unos loros":' }
-                    ]
-                },
-                espacio: {
-                    titulo: 'Radares de Palabras', subtitulo: 'Identificando Artículos Espaciales', portada: 'ARTÍCULOS ESPACIALES', theme: 'verde',
-                    blocks: [
-                        { id: 1, type: 'learn', content: '¡Coordenadas listas! Delante de cada objeto espacial siempre viaja un artículo que nos dice su género (masculino/femenino) y su número.' },
-                        { id: 2, type: 'boxes', question: 'Separa los artículos por su género:', words: 'el, la, los, las, un, una, unos, unas', label1: 'MASCULINO', label2: 'FEMENINO', label3: 'CONTIENEN PLURAL' },
-                        { id: 3, type: 'connect', question: 'Une para formar parejas correctas galácticas:', left1: 'El artículo "El"', right1: 'universo.', left2: 'El artículo "Las"', right2: 'estrellas.', left3: 'El artículo "Una"', right3: 'nave.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: el, los, la', text: '[HUECO] cohete despegó con fuerza. [HUECO] astronautas saludaron a [HUECO] científica antes de salir de la Tierra.' },
-                        { id: 5, type: 'order', question: 'Ordena las palabras de singular a plural absoluto:', lines: ['El planeta', 'Las galaxias', 'Los meteoritos'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja lo que representa el artículo femenino singular a la izquierda y masculino plural a la derecha:' }
-                    ]
-                }
-            },
-            pronombres: {
-                piratas: {
-                    titulo: '¡Cambio de Tripulación!', subtitulo: 'Los Pronombres Personales', portada: 'PRONOMBRES PIRATAS', theme: 'verde',
-                    blocks: [
-                        { id: 1, type: 'learn', content: '¡Secreto pirata! Los pronombres personales son palabras que sustituyen a los nombres de las personas para no tener que repetirlos.' },
-                        { id: 2, type: 'boxes', question: 'Agrupa los pronombres según hablen de una persona o de muchas:', words: 'yo, nosotros, tú, ellos, ella, vosotros', label1: 'SINGULAR (Uno)', label2: 'PLURAL (Varios)', label3: 'CONTIENEN SEGUNDA PERS.' },
-                        { id: 3, type: 'connect', question: '¿Por qué pronombre cambiarías a estos personajes?:', left1: 'El capitán y yo', right1: 'Nosotros.', left2: 'El cocinero Pata de Palo', right2: 'Él.', left3: 'Las sirenas del mar', right3: 'Ellas.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: él, ellos, nosotros', text: '[HUECO] vigila el horizonte con el catalejo. Mientras tanto, [HUECO] limpian la cubierta y [HUECO] cantamos juntos.' },
-                        { id: 5, type: 'order', question: 'Ordena los pronombres siguiendo el orden tradicional de las personas gramaticales (1º, 2º y 3º):', lines: ['Él o Ella', 'Yo como emisor', 'Tú como receptor'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja una escena que represente al pronombre "Nosotros" en el barco y otra para "Él":' }
-                    ]
-                },
-                espacio: {
-                    titulo: 'Sustitutos en la Cabina', subtitulo: 'Los Pronombres del Espacio', portada: 'PRONOMBRES EN ÓRBITA', theme: 'rosa',
-                    blocks: [
-                        { id: 1, type: 'learn', content: '¡Misión de reemplazo! En vez de decir "La astronauta recolecta rocas", podemos usar un pronombre y decir "Ella recolecta rocas".' },
-                        { id: 2, type: 'boxes', question: 'Clasifica quién realiza la misión espacial:', words: 'yo, él, nosotros, ellas, tú, vosotros', label1: 'HABLO DE MÍ', label2: 'HABLO DE TI', label3: 'HABLO DE OTROS' },
-                        { id: 3, type: 'connect', question: 'Une los nombres con su pronombre espacial ideal:', left1: 'Tomás y Lucas', right1: 'Ellos.', left2: 'La comandante Julia', right2: 'Ella.', left3: 'Tú y tu amigo científico', right3: 'Vosotros.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: nosotros, tú, yo', text: '¡Cambio! [HUECO] estamos listos para descender de la cabina. ¿[HUECO] nos escuchas bien desde la base porque [HUECO] vigilo el motor?' },
-                        { id: 5, type: 'order', question: 'Ordena de mayor cantidad de personas implicadas a menos:', lines: ['Nosotros viajamos juntos', 'Ellos exploran la zona', 'Yo vigilo el panel central'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja la acción descrita por el pronombre "Yo" a la izquierda y "Ellas" a la derecha:' }
-                    ]
-                }
-            },
-            sinonimos_antonimos: {
-                piratas: {
-                    titulo: 'Palabras Gemelas y Rivales', subtitulo: 'Sinónimos y Antónimos', portada: 'PALABRAS EN COMBATE', theme: 'naranja',
-                    blocks: [
-                        { id: 1, type: 'learn', content: '¡Atento al código! Los sinónimos son palabras que significan lo mismo. Los antónimos son palabras opuestas.' },
-                        { id: 2, type: 'boxes', question: 'Empareja los conceptos en cofres opuestos (Antónimos):', words: 'abrir, cerrar, subir, bajar, ganar, perder', label1: 'ACCIÓN', label2: 'OPUESTO DIRECTO', label3: 'REVISADO' },
-                        { id: 3, type: 'connect', question: 'Une las palabras que sean SINÓNIMOS (significan igual):', left1: 'El barco es bonito y', right1: 'hermoso.', left2: 'El botín es valioso y', right2: 'costoso.', left3: 'El pirata camina feliz y', right3: 'contento.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: abierto, triste, frío', text: 'El cofre del tesoro estaba muy [HUECO] bajo la arena. El pirata se puso muy [HUECO] al notar que el clima estaba [HUECO].' },
-                        { id: 5, type: 'order', question: 'Ordena las parejas según sean Sinónimos (1 y 2) o Antónimos (3):', lines: ['Rápido - Veloz', 'Terminar - Acabar', 'Grande - Pequeño'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja un pirata alegre a la izquierda y su antónimo exacto a la derecha:' }
-                    ]
-                },
-                espacio: {
-                    titulo: 'El Radar de Significados', subtitulo: 'Sinónimos y Antónimos Galácticos', portada: 'RADARES SEMÁNTICOS', theme: 'azul',
-                    blocks: [
-                        { id: 1, type: 'learn', content: '¡Mensaje encriptado! Los astronautas usan sinónimos para decir lo mismo con otras palabras y antónimos para dar la vuelta al mensaje.' },
-                        { id: 2, type: 'boxes', question: 'Clasifica según sean parejas de Sinónimos o Antónimos:', words: 'fuego-calor, luz-oscuridad, veloz-rápido, frío-caliente', label1: 'SIGNIFICAN IGUAL', label2: 'SIGNIFICAN OPUESTO', label3: 'VERIFICADO' },
-                        { id: 3, type: 'connect', question: 'Une cada palabra con su antónimo (opuesto) estelar:', left1: 'Lo opuesto de encender', right1: 'apagar.', left2: 'Lo opuesto de despegar', right2: 'aterrizar.', left3: 'Lo opuesto de vacío', right3: 'lleno.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: extenso, hermoso, lejano', text: 'El viaje en cohete es muy [HUECO]. El espacio exterior es un lugar [HUECO] donde vemos un sol [HUECO].' },
-                        { id: 5, type: 'order', question: 'Ordena de menor a mayor distancia conceptual basándote en los términos:', lines: ['Cerca - Lejos', 'Lejano - Distante', 'Idéntico - Mismo'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja un cohete encendido a la izquierda y su antónimo de acción a la derecha:' }
-                    ]
-                }
-            },
-            diminutivos_aumentativos: {
-                piratas: {
-                    titulo: 'Tamaños de Leyenda', subtitulo: 'Diminutivos y Aumentativos', portada: 'PIRATAS DE TODOS TAMAÑOS', theme: 'azul',
-                    blocks: [
-                        { id: 1, type: 'learn', content: '¡Efecto óptico! Los diminutivos hacen las cosas pequeñas usando terminaciones como -ito. Los aumentativos las hacen gigantes con -azo o -ón.' },
-                        { id: 2, type: 'boxes', question: 'Clasifica estas palabras según el tamaño que expresan:', words: 'barquito, espadón, lorito, cofrazo, islita, piratazo', label1: 'DIMINUTIVO (Chico)', label2: 'AUMENTATIVO (Grande)', label3: 'RAÍZ COMÚN' },
-                        { id: 3, type: 'connect', question: 'Une la palabra base con su diminutivo pirata:', left1: 'Un mapa pequeño es un', right1: 'mapita.', left2: 'Una mesa pequeña es una', right2: 'mesita.', left3: 'Un pez pequeño es un', right3: 'pececito.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: tiburonazo, sombrerote, cofrazo', text: 'El capitán vio un tiburón gigante, ¡un [HUECO]! Llevaba un sombrero enorme, ¡un [HUECO]! y guardaba un [HUECO].' },
-                        { id: 5, type: 'order', question: 'Ordena las palabras de menor a mayor tamaño relativo según su sufijo:', lines: ['Pajarito volador', 'Pájaro común', 'Pajarrajo gigante'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja un barquito a la izquierda y un barconazo a la derecha respetando los sufijos:' }
-                    ]
-                },
-                espacio: {
-                    titulo: 'Efecto Zoom Espacial', subtitulo: 'Jugando con el Tamaño de las Palabras', portada: 'ZOOM GALÁCTICO', theme: 'rosa',
-                    blocks: [
-                        { id: 1, type: 'learn', content: '¡Lentes de aumento astronómicas! Modificamos las palabras para indicar si algo es una pequeña cosita espacial o un fenómeno descomunal.' },
-                        { id: 2, type: 'boxes', question: 'Organiza las palabras en sus contenedores métricos:', words: 'estrellita, planetazo, navecita, cohetazo, satelitito, rocaona', label1: 'MINIATURAS (-ito)', label2: 'GIGANTES (-azo)', label3: 'EN ÓRBITA' },
-                        { id: 3, type: 'connect', question: 'Une la palabra base con su aumentativo galáctico:', left1: 'Un planeta enorme es un', right1: 'planetazo.', left2: 'Una nave enorme es una', right2: 'navaza.', left3: 'Un motor enorme es un', right3: 'motorazo.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: estrellita, navecita, roquita', text: 'Mirando por el telescopio vi una [HUECO] fugaz. Parecía que viajaba al lado de una [HUECO] y esquivaba una [HUECO] flotante.' },
-                        { id: 5, type: 'order', question: 'Ordena las estructuras según su escala de mayor a menor:', lines: ['Cohetazo interestelar', 'Cohete estándar', 'Cohetito de juguete'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja una estrellita en la zona de puntos y un planetazo en la zona de líneas continuas:' }
-                    ]
-                }
-            },
-            ortografia: {
-                piratas: {
-                    titulo: 'El Código Secreto', subtitulo: 'Ortografía Práctica: Regla de la M', portada: 'ORTOGRAFÍA A BORDO', theme: 'verde',
-                    blocks: [
-                        { id: 1, type: 'learn', content: '¡Atención corsario! Hay una regla que nunca falla: antes de las letras P y B siempre se escribe la letra M. ¡Nunca se pone una N!' },
-                        { id: 2, type: 'boxes', question: 'Clasifica las palabras según tengan MP o MB:', words: 'campana, tambor, trampa, alfombra, bombero, limpiar', label1: 'CONTIENEN "MP"', label2: 'CONTIENEN "MB"', label3: 'TIENEN "M"' },
-                        { id: 3, type: 'connect', question: 'Une las sílabas correctas para formar la palabra pirata:', left1: 'com -', right1: 'pañero.', left2: 'tiem -', right2: 'po.', left3: 'som -', right3: 'bra.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: tambor, campana, campo', text: 'El pirata tocó el [HUECO] para avisar del peligro. Encendieron una [HUECO] y limpiaron el [HUECO] de tiro.' },
-                        { id: 5, type: 'order', question: 'Ordena las palabras alfabéticamente fijándote en su combinación interna:', lines: ['Bombero', 'Campamento', 'Trampa'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja un tambor gigante y una campana dorada rellenando el espacio:' }
-                    ]
-                },
-                espacio: {
-                    titulo: 'Leyes Ortográficas', subtitulo: 'Escribiendo Bien en el Espacio', portada: 'ORTOGRAFÍA CIENTÍFICA', theme: 'naranja',
-                    blocks: [
-                        { id: 1, type: 'learn', content: '¡Alerta en los teclados! En el espacio también respetamos las normas: recuerda escribir siempre M antes de la P y de la B.' },
-                        { id: 2, type: 'boxes', question: 'Separa los comandos según su combinación ortográfica:', words: 'rumbo, campo, asombro, campeón, bombilla, compartir', label1: 'CON "MB"', label2: 'CON "MP"', label3: 'SISTEMA CORRECTO' },
-                        { id: 3, type: 'connect', question: 'Une los trozos para construir palabras del espacio sin faltas:', left1: 'a - som -', right1: 'bro.', left2: 'com - pu -', right2: 'tadora.', left3: 'tra - m -', right3: 'pa.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: computadora, rumbo, asombro', text: 'La [HUECO] cambió el [HUECO] de la nave espacial. Los científicos se llevaron un [HUECO] tremendo al ver la pantalla.' },
-                        { id: 5, type: 'order', question: 'Ordena según sigan el orden MP o MB:', lines: ['Campo galáctico', 'Campeón espacial', 'Asombro planetario'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja una bombilla encendida en el panel de control y una trampa espacial abierta:' }
-                    ]
-                }
-            },
-            oraciones: {
-                piratas: {
-                    titulo: '¡Gritos y Preguntas en el Mar!', subtitulo: 'Tipos de Oraciones: ¿Qué signo uso?', portada: 'SIGNOS CORARIOS', theme: 'naranja',
-                    blocks: [
-                        { id: 1, type: 'learn', content: '¡Atención a las señales! Usamos los signos de interrogación (¿?) para hacer preguntas. Usamos los signos de exclamación (¡!) para gritar o expresar sorpresa.' },
-                        { id: 2, type: 'boxes', question: 'Clasifica según requieran signos de Pregunta (¿?) o de Susto (¡!):', words: 'Dónde está, Al abordaje, Quién eres tú, Viva el rey, Qué miedo, Cuántos hay', label1: 'PREGUNTAS (¿?)', label2: 'EXCLAMACIONES (¡!)', label3: 'TIENEN SIGNOS' },
-                        { id: 3, type: 'connect', question: 'Une cada comienzo de frase con su cierre de signo adecuado:', left1: '¿Dónde está el mapa del', right1: 'tesoro?', left2: '¡Cuidado con ese', right2: 'tiburón!', left3: 'El barco flota en el', right3: 'mar.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa colocando los signos de puntuación de esta lista: ¿ ?, ¡ !, el punto', text: '[HUECO] Cómo te llamas, pirata [HUECO] [HUECO] Al abordaje, mis valientes marineros [HUECO] El barco navega con viento fuerte [HUECO]' },
-                        { id: 5, type: 'order', question: 'Ordena las oraciones según sean Interrogativas, Exclamativas o Enunciativas comunes:', lines: ['¿Cuántas monedas quedan?', '¡Hemos ganado la carrera!', 'El barco es de color madera.'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja la cara de un pirata asustado y otra de uno pensando una duda:' }
-                    ]
-                },
-                espacio: {
-                    titulo: 'Mensajes de la Estación Espacial', subtitulo: 'Interrogación y Exclamación Galáctica', portada: 'SIGNOS EN ÓRBITA', theme: 'azul',
-                    blocks: [
-                        { id: 1, type: 'learn', content: '¡Comunicación intermitente! Cuando la base hace una pregunta usa los signos (¿?). Cuando hay una emergencia o emoción, usa los de exclamación (¡!).' },
-                        { id: 2, type: 'boxes', question: 'Clasifica los mensajes recibidos por la antena de radio:', words: 'Hay vida allí, Cuidado, Qué bonito es, Cuándo volvemos, Auxilio, Qué hora es', label1: 'INTERROGACIÓN (¿?)', label2: 'EXCLAMACIÓN (¡!)', label3: 'MENSAJES REVISADOS' },
-                        { id: 3, type: 'connect', question: 'Une los fragmentos para crear el tipo de oración adecuado:', left1: '¿Viste aquel meteorito', right1: 'caer?', left2: '¡Hemos llegado a la', right2: 'meta!', left3: 'La estrella brilla de', right3: 'noche.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa colocando los signos de puntuación exactos de esta lista: ¡ !, ¿ ?, el punto', text: '[HUECO] Auxilio, nos quedamos sin combustible [HUECO] [HUECO] Hay marcianos en ese planeta helado [HUECO] Los planetas giran alrededor del sol [HUECO]' },
-                        { id: 5, type: 'order', question: 'Ordena según corresponda al uso de signos o punto final:', lines: ['¿A qué distancia está Saturno?', '¡Cuidado con el asteroide!', 'La nave aterrizará pronto.'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja una señal de peligro espacial a la izquierda y una duda de ruta a la derecha:' }
                     ]
                 }
             },
@@ -489,184 +374,112 @@
             // ========================= 3º Y 4º PRIMARIA =========================
             sujeto_predicado: {
                 piratas: {
-                    titulo: 'El Timón y el Destino', subtitulo: 'Separando el Sujeto y el Predicado', portada: 'SUJETO Y PREDICADO', theme: 'verde',
+                    titulo: 'El Timón de las Oraciones', subtitulo: 'Sujeto y Predicado en el Mar', portada: 'SUJETO Y PREDICADO', theme: 'verde',
                     blocks: [
-                        { id: 1, type: 'learn', content: 'El SUJETO indica quién realiza la acción (ej: El capitán). El PREDICADO es todo lo que hace el sujeto y siempre contiene el verbo (ej: hundió el barco).' },
-                        { id: 2, type: 'boxes', question: 'Clasifica estos fragmentos en el cofre correcto:', words: 'El loro verde, navega veloz, Los piratas, comen galletas, busca un mapa', label1: 'ES UN SUJETO', label2: 'ES UN PREDICADO', label3: 'TIENE VERBO' },
-                        { id: 3, type: 'connect', question: 'Une cada Sujeto con el Predicado que le da sentido a la oración:', left1: 'El barco fantasma', right1: 'asusta a los marineros.', left2: 'La espada afilada', right2: 'cortó la cuerda gruesa.', left3: 'Nosotros', right3: 'encontramos el cofre.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras de la lista para formar oraciones: loro, pirata, tesoro', text: 'El valiente [HUECO] saltó por la borda. Su [HUECO] verde voló hacia la isla, donde el gran [HUECO] estaba escondido bajo la arena.' },
-                        { id: 5, type: 'order', question: 'Ordena las partes para formar una oración con estructura [Sujeto + Predicado]:', lines: ['El capitán', 'estudia el mapa', 'en la cabina de madera'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja el sujeto "Un pulpo gigante" a la izquierda, y su predicado "atrapa el barco" a la derecha:' }
+                        { id: 1, type: 'learn', content: 'El SUJETO indica quién realiza la acción. El PREDICADO es todo lo que hace el sujeto y siempre contiene el verbo principal.' },
+                        { id: 2, type: 'boxes', question: 'Separa los fragmentos sintácticos en su compartimento:', words: 'El loro verde, navega veloz, Los piratas, comen galletas, busca un mapa, La fragata', label1: 'ES UN SUJETO', label2: 'ES UN PREDICADO', label3: 'CONTIENE EL VERBO' },
+                        { id: 3, type: 'connect', question: 'Une cada Sujeto con el Predicado correspondiente sin pistas visuales:', left1: 'El barco fantasma', right1: 'cortó la cuerda gruesa.', left2: 'La espada afilada', right2: 'encontramos el cofre.', left3: 'Nosotros', right3: 'asusta a los marineros.' },
+                        { id: 4, type: 'inline-gaps', question: 'Completa usando las palabras de la lista desordenadas: tesoro, loro, pirata', text: 'El valiente [HUECO] saltó por la borda. Su [HUECO] verde voló hacia la isla, donde el gran [HUECO] estaba escondido bajo la arena.' },
+                        { id: 5, type: 'order', question: 'Ordena los bloques correctamente para formar una oración con sentido didáctico:', lines: ['El capitán del navío', 'estudia las cartas náuticas', 'en la vieja cabina de madera'] },
+                        { id: 6, type: 'drawing', question: 'Dibuja el sujeto "Un pulpo gigante" a la izquierda y el predicado "atrapa el barco" a la derecha:' }
                     ]
                 },
                 espacio: {
-                    titulo: 'Misión y Tripulantes', subtitulo: 'Conectando Sujeto y Predicado', portada: 'SUJETO ESTELAR', theme: 'naranja',
+                    titulo: 'Misiones Estelares', subtitulo: 'Estructuras de Sujeto y Predicado', portada: 'SINTAXIS GALÁCTICA', theme: 'naranja',
                     blocks: [
-                        { id: 1, type: 'learn', content: 'En la base espacial aprendemos: El SUJETO es quien hace la acción (La nave). El PREDICADO es lo que hace y contiene el verbo central (aterrizó en Marte).' },
-                        { id: 2, type: 'boxes', question: 'Clasifica los datos del radar según su función en la oración:', words: 'El astronauta, reparó el motor, Las estrellas, brillan mucho, El satélite', label1: 'SON SUJETOS', label2: 'SON PREDICADOS', label3: 'TIENEN VERBO' },
-                        { id: 3, type: 'connect', question: 'Acopla el Sujeto con su Predicado correcto para lanzar la misión:', left1: 'El cohete espacial', right1: 'despegó con fuerza.', left2: 'Los meteoritos', right2: 'cruzaron el cielo.', left3: 'La computadora', right3: 'calculó la ruta.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras de la lista: comandante, nave, alienígena', text: 'La [HUECO] orbitó el planeta rojo. De pronto, un [HUECO] saludó por la ventana y la [HUECO] activó las cámaras velozmente.' },
-                        { id: 5, type: 'order', question: 'Ordena los fragmentos para formar una oración [Sujeto + Verbo + Resto del Predicado]:', lines: ['Los científicos', 'descubrieron', 'un nuevo planeta brillante'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja el sujeto "Un robot" a la izquierda y el predicado "repara el cohete" a la derecha:' }
+                        { id: 1, type: 'learn', content: 'El SUJETO es el elemento que ejecuta la acción en el cosmos. El PREDICADO describe detalladamente la acción junto al núcleo verbal.' },
+                        { id: 2, type: 'boxes', question: 'Clasifica los datos en la terminal de control:', words: 'El astronauta, reparó el motor, Las estrellas, brillan mucho, El satélite, orbitan', label1: 'SON SUJETOS', label2: 'SON PREDICADOS', label3: 'CONTIENEN ACCIÓN' },
+                        { id: 3, type: 'connect', question: 'Conecta cada Sujeto con su Predicado desordenado:', left1: 'El cohete espacial', right1: 'cruzaron el firmamento.', left2: 'Los meteoritos', right2: 'calculó la trayectoria.', left3: 'La computadora', right3: 'despegó con potencia.' },
+                        { id: 4, type: 'inline-gaps', question: 'Rellena con los términos de la lista mezclados: alienígena, comandante, nave', text: 'La [HUECO] orbitó el planeta rojo. De pronto, un [HUECO] saludó por la ventana y la [HUECO] activó las cámaras de seguridad.' },
+                        { id: 5, type: 'order', question: 'Ordena la estructura oracional de forma coherente:', lines: ['Los experimentados científicos', 'descubrieron con asombro', 'un nuevo planeta habitable'] },
+                        { id: 6, type: 'drawing', question: 'Dibuja el sujeto "Un robot mecánico" y el predicado "repara el cohete dañado":' }
                     ]
                 }
             },
             acentuacion: {
                 piratas: {
-                    titulo: 'El Mapa de las Tildes', subtitulo: 'Palabras Agudas, Llanas y Esdrújulas', portada: 'LA TILDE PIRATA', theme: 'azul',
+                    titulo: 'La Ruta de la Acentuación', subtitulo: 'Agudas, Llanas y Esdrújulas', portada: 'TILDES EN ALTA MAR', theme: 'azul',
                     blocks: [
-                        { id: 1, type: 'learn', content: 'La sílaba fuerte es la tónica. Las AGUDAS se acentúan en la última sílaba (timón), las LLANAS en la penúltima (barco) y las ESDRÚJULAS en la antepenúltima (brújula).' },
-                        { id: 2, type: 'boxes', question: 'Clasifica las palabras piratas según su sílaba tónica:', words: 'capitán, loro, mástil, brújula, farol, náufrago', label1: 'AGUDAS', label2: 'LLANAS', label3: 'ESDRÚJULAS' },
-                        { id: 3, type: 'connect', question: 'Une cada palabra con la regla ortográfica de la tilde que cumple:', left1: 'La palabra "timón" lleva tilde', right1: 'por ser aguda terminada en N.', left2: 'La palabra "mástil" lleva tilde', right2: 'por ser llana y no acabar en n/s/vocal.', left3: 'La palabra "océano" lleva tilde', right3: 'porque las esdrújulas siempre llevan.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa los huecos con estas palabras acentuadas: tiburón, piratería, rápido', text: 'El barco navegaba muy [HUECO]. De repente, un gran [HUECO] atacó el casco, pero el experto en [HUECO] logró esquivarlo a tiempo.' },
-                        { id: 5, type: 'order', question: 'Ordena las palabras desde la que tiene el acento más al final (Aguda) hasta el principio (Esdrújula):', lines: ['Compás (Última sílaba)', 'Tesoro (Penúltima sílaba)', 'Pólvora (Antepenúltima sílaba)'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja un objeto agudo (timón) y un objeto esdrújulo (brújula):' }
+                        { id: 1, type: 'learn', content: 'AGUDAS: fuerza en la última sílaba (llevan tilde si acaban en n, s o vocal). LLANAS: fuerza en la penúltima (llevan tilde si NO acaban en n, s o vocal). ESDRÚJULAS: fuerza en la antepenúltima (siempre llevan tilde).' },
+                        { id: 2, type: 'boxes', question: 'Distribuye las palabras en sus respectivos buzones de acentuación:', words: 'capitán, loro, mástil, brújula, farol, náufrago', label1: 'AGUDAS', label2: 'LLANAS', label3: 'ESDRÚJULAS' },
+                        { id: 3, type: 'connect', question: 'Une cada palabra con la justificación ortográfica correspondiente:', left1: 'La palabra "timón"', right1: 'es llana terminada en consonante distinta de N o S.', left2: 'La palabra "mástil"', right2: 'es esdrújula y estas siempre se acentúan.', left3: 'La palabra "océano"', right3: 'es aguda terminada en la consonante N.' },
+                        { id: 4, type: 'inline-gaps', question: 'Completa los huecos con la palabra adecuada de la lista: rápido, tiburón, piratería', text: 'El barco navegaba muy [HUECO]. De repente, un gran [HUECO] atacó el casco, pero el experto en [HUECO] logró esquivarlo.' },
+                        { id: 5, type: 'order', question: 'Ordena de menor a mayor distancia del acento (Aguda -> Llana -> Esdrújula):', lines: ['Compás (Fuerza al final)', 'Tesoro (Fuerza en la penúltima)', 'Pólvora (Fuerza al inicio)'] },
+                        { id: 6, type: 'drawing', question: 'Dibuja un sustantivo agudo con tilde (timón) y uno esdrújulo (brújula):' }
                     ]
                 },
                 espacio: {
-                    titulo: 'Coordenadas Acentuadas', subtitulo: 'Acentuación en el Cosmos', portada: 'TILDES EN ÓRBITA', theme: 'rosa',
+                    titulo: 'Coordenadas Ortográficas', subtitulo: 'Reglas de Acentuación Estelar', portada: 'ÓRBITAS ACENTUADAS', theme: 'rosa',
                     blocks: [
-                        { id: 1, type: 'learn', content: 'Identifica la sílaba fuerte: AGUDAS al final (radar), LLANAS en medio (planeta) y ESDRÚJULAS al principio (órbita). ¡Las esdrújulas siempre llevan tilde!' },
-                        { id: 2, type: 'boxes', question: 'Clasifica las señales espaciales según el lugar de su sílaba tónica:', words: 'motor, nave, cráter, satélite, sol, alienígena', label1: 'AGUDAS', label2: 'LLANAS', label3: 'ESDRÚJULAS' },
-                        { id: 3, type: 'connect', question: 'Une la palabra espacial con el motivo de su acentuación:', left1: 'La palabra "rotación" tiene tilde', right1: 'por ser aguda terminada en N.', left2: 'La palabra "láser" tiene tilde', right2: 'por ser llana terminada en R.', left3: 'La palabra "atmósfera" tiene tilde', right3: 'porque todas las esdrújulas llevan.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa los huecos con estas palabras tildadas: módulo, exploración, energía', text: 'El [HUECO] lunar aterrizó sin problemas. La misión de [HUECO] fue un éxito porque los paneles solares captaron mucha [HUECO].' },
-                        { id: 5, type: 'order', question: 'Ordena siguiendo la secuencia: Aguda, Llana, Esdrújula:', lines: ['Despegó', 'Cohete', 'Astrónomo'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja algo esdrújulo (satélite) y algo llano (estrella) guiándote por la tilde:' }
+                        { id: 1, type: 'learn', content: 'Localiza la sílaba tónica en el espacio: Última (Agudas), Penúltima (Llanas) o Antepenúltima (Esdrújulas). Recuerda aplicar las reglas de la tilde.' },
+                        { id: 2, type: 'boxes', question: 'Clasifica las señales de radio recibidas:', words: 'motor, nave, cráter, satélite, sol, alienígena', label1: 'AGUDAS', label2: 'LLANAS', label3: 'ESDRÚJULAS' },
+                        { id: 3, type: 'connect', question: 'Une las opciones cruzadas para validar las reglas:', left1: 'La palabra "rotación"', right1: 'lleva tilde por ser llana acabada en la consonante R.', left2: 'La palabra "láser"', right2: 'lleva tilde por ser una palabra esdrújula.', left3: 'La palabra "atmósfera"', right3: 'lleva tilde por ser aguda acabada en la letra N.' },
+                        { id: 4, type: 'inline-gaps', question: 'Completa el reporte de vuelo con las palabras mezcladas: energía, exploración, módulo', text: 'El [HUECO] lunar aterrizó sin problemas. La misión de [HUECO] fue un éxito porque los paneles solares captaron mucha [HUECO].' },
+                        { id: 5, type: 'order', question: 'Ordena la secuencia exacta (Aguda, Llana y Esdrújula):', lines: ['Despegó', 'Cohete', 'Astrónomo'] },
+                        { id: 6, type: 'drawing', question: 'Dibuja un objeto espacial de tipo esdrújulo (satélite) y uno llano (estrella):' }
                     ]
                 }
             },
-            compuestas_derivadas: {
+
+            // ========================= 5º Y 6º PRIMARIA =========================
+            grados_adjetivo: {
                 piratas: {
-                    titulo: 'Palabras Construidas', subtitulo: 'Compuestas y Derivadas Piratas', portada: 'CONSTRUCTORES DE PALABRAS', theme: 'azul',
+                    titulo: 'Escala de Ferocidad', subtitulo: 'Los Grados del Adjetivo Cualificativo', portada: 'GRADOS DEL ADJETIVO', theme: 'naranja',
                     blocks: [
-                        { id: 1, type: 'learn', content: 'Las palabras compuestas se forman uniendo dos o más palabras (guarda + costas). Las derivadas provienen de una palabra primitiva (mar -> marinero).' },
-                        { id: 2, type: 'boxes', question: 'Clasifica estas palabras de la cubierta del barco:', words: 'guardacostas, altamar, marinero, marea, rompeolas, oleaje', label1: 'COMPUESTAS (2 unidas)', label2: 'DERIVADAS (De raíz)', label3: 'PRIMITIVAS' },
-                        { id: 3, type: 'connect', question: 'Une las dos partes para formar una palabra compuesta pirata:', left1: 'salvar +', right1: 'vidas.', left2: 'romper +', right2: 'cabezas.', left3: 'parar +', right3: 'rayos.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando la lista exacta: salvavidas, marinero, catalejo', text: 'El joven [HUECO] oteaba el horizonte con su [HUECO]. Cuando vio a un hombre al agua, le lanzó el [HUECO].' },
-                        { id: 5, type: 'order', question: 'Ordena la secuencia: Primitiva, Derivada, Compuesta:', lines: ['Mar (Primitiva)', 'Maremoto (Derivada)', 'Bajamar (Compuesta)'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja un "abrelatas" (palabra compuesta) abriendo un tesoro:' }
+                        { id: 1, type: 'learn', content: 'Los adjetivos modulan su intensidad en tres grados: Positivo (forma básica: fiero), Comparativo (superioridad/igualdad/inferioridad) y Superlativo (grado máximo: fierísimo o muy fiero).' },
+                        { id: 2, type: 'boxes', question: 'Clasifica los adjetivos descriptivos de la tripulación:', words: 'veloz, más astuto, listísimo, tan fiero, muy grande, cruel', label1: 'GRADO POSITIVO', label2: 'GRADO COMPARATIVO', label3: 'GRADO SUPERLATIVO' },
+                        { id: 3, type: 'connect', question: 'Relaciona de forma cruzada cada enunciado con su grado adjetival:', left1: 'Un pirata más malo que él', right1: 'Grado Superlativo Absoluto.', left2: 'El barco es grandísimo', right2: 'Grado Positivo Estándar.', left3: 'El loro es de color verde', right3: 'Grado Comparativo de Superioridad.' },
+                        { id: 4, type: 'inline-gaps', question: 'Completa los huecos utilizando los morfemas de la lista: ísimo, tan, menos', text: 'El capitán es [HUECO] fiero como un león de la selva. Su barco es [HUECO] rápido que el nuestro, pero su cañón es grand[HUECO].' },
+                        { id: 5, type: 'order', question: 'Ordena de menor a mayor intensidad expresada por el adjetivo:', lines: ['Malo (Grado positivo)', 'Peor (Grado comparativo irregular)', 'Pésimo (Grado superlativo irregular)'] },
+                        { id: 6, type: 'drawing', question: 'Dibuja un elemento en grado positivo (barco grande) y otro en grado superlativo (barco grandísimo):' }
                     ]
                 },
                 espacio: {
-                    titulo: 'Fusión de Vocabulario', subtitulo: 'Palabras Compuestas y Derivadas', portada: 'FUSIÓN LINGÜÍSTICA', theme: 'verde',
+                    titulo: 'Magnitudes Métricas', subtitulo: 'Grados del Adjetivo en el Cosmos', portada: 'ADJETIVOS AVANZADOS', theme: 'azul',
                     blocks: [
-                        { id: 1, type: 'learn', content: 'En el espacio usamos palabras compuestas (para + caídas = paracaídas) y palabras derivadas que vienen de la misma raíz o familia (luna -> alunizar).' },
-                        { id: 2, type: 'boxes', question: 'Clasifica los términos del manual de vuelo:', words: 'pararrayos, portaequipajes, astronauta, espacial, lunático, estrellado', label1: 'COMPUESTAS', label2: 'DERIVADAS', label3: 'REVISIÓN OK' },
-                        { id: 3, type: 'connect', question: 'Une las dos mitades para crear el objeto espacial:', left1: 'tele +', right1: 'scopio.', left2: 'aero +', right2: 'puerto.', left3: 'micro +', right3: 'ondas.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa utilizando la lista exacta: paracaídas, alunizaje, espacial', text: 'El traje [HUECO] es muy pesado. Tras un suave [HUECO] en la luna, el explorador no necesitó usar su [HUECO].' },
-                        { id: 5, type: 'order', question: 'Sigue el orden: Palabra Primitiva, Derivada, Compuesta:', lines: ['Sol (Primitiva)', 'Solar (Derivada)', 'Girasol (Compuesta)'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja un "pararrayos" (compuesta) protegiendo la base espacial:' }
+                        { id: 1, type: 'learn', content: 'Los científicos espaciales usan grados para evaluar datos: Positivo (distancia lejana), Comparativo (más lejano que) y Superlativo (lejanísimo / extremadamente lejano).' },
+                        { id: 2, type: 'boxes', question: 'Clasifica las lecturas obtenidas por el telescopio hondo:', words: 'brillante, menos caliente, lejanísimo, enorme, tan veloz, lentísimo', label1: 'POSITIVO', label2: 'COMPARATIVO', label3: 'SUPERLATIVO' },
+                        { id: 3, type: 'connect', question: 'Asocia cada medición con su estructura sintáctica correspondiente:', left1: 'La estrella es muy antigua', right1: 'Grado Positivo.', left2: 'Ese meteorito es gigantesco', right2: 'Grado Comparativo de Inferioridad.', left3: 'El cometa es menos frío que', right3: 'Grado Superlativo.' },
+                        { id: 4, type: 'inline-gaps', question: 'Completa el informe con las palabras desordenadas de la lista: muy, tan, menos', text: 'Este traje es [HUECO] seguro como el tuyo. Sin embargo, el casco nuevo es [HUECO] pesado y resulta [HUECO] cómodo para maniobrar.' },
+                        { id: 5, type: 'order', question: 'Sigue estrictamente la secuencia: Positivo -> Comparativo de Igualdad -> Superlativo:', lines: ['Rápido', 'Tan rápido como la luz', 'Rapidísimo'] },
+                        { id: 6, type: 'drawing', question: 'Representa mediante ilustración una luna en grado positivo (brillante) y otra en grado superlativo (brillantísima):' }
                     ]
                 }
             },
-            familia_palabras: {
+            adverbios_preposiciones: {
                 piratas: {
-                    titulo: 'Árboles de Palabras', subtitulo: 'La Familia de Palabras', portada: 'FAMILIAS PIRATAS', theme: 'rosa',
+                    titulo: 'Coordenadas Invisibles', subtitulo: 'Adverbios y Nexos Invariables', portada: 'ADVERBIOS Y PALABRAS NEXO', theme: 'verde',
                     blocks: [
-                        { id: 1, type: 'learn', content: 'Una familia de palabras es un grupo de vocablos que comparten la misma raíz primitiva y tienen significados relacionados (ej. mar, marino, marinero, maremoto).' },
-                        { id: 2, type: 'boxes', question: 'Clasifica los tripulantes según su familia primitiva:', words: 'barca, embarcar, barquero, pescar, pescador, pescadería', label1: 'FAMILIA: BARCO', label2: 'FAMILIA: PEZ/PESCA', label3: 'INTRUSOS' },
-                        { id: 3, type: 'connect', question: 'Relaciona la palabra base con el resto de su familia:', left1: 'Familia de MAR:', right1: 'marea, marítimo.', left2: 'Familia de NAVEGAR:', right2: 'navegante, navegación.', left3: 'Familia de JOYA:', right3: 'joyero, joyería.' },
-                        { id: 4, type: 'inline-gaps', question: 'Rellena con las derivadas de la lista: marineros, marea, submarino', text: 'Los valientes [HUECO] observaron cómo subía la [HUECO] en el puerto antes de sumergirse en el [HUECO] gigante.' },
-                        { id: 5, type: 'order', question: 'Ordena de la raíz principal a sus derivados más largos:', lines: ['Raíz primitiva: Sal', 'Derivada corta: Salero', 'Derivada larga: Salmuera'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja dos elementos de la misma familia: Un barco y un embarcadero.' }
+                        { id: 1, type: 'learn', content: 'Los adverbios modifican al verbo indicando lugar, tiempo o modo (lejos, hoy, bien). Las preposiciones (a, bajo, con, desde...) enlazan palabras de forma invariable.' },
+                        { id: 2, type: 'boxes', question: 'Organiza los elementos gramaticales del mapa de navegación:', words: 'lejos, bajo, hoy, desde, rápidamente, hasta', label1: 'PREPOSICIONES', label2: 'ADVERBIOS DE LUGAR', label3: 'OTROS ADVERBIOS' },
+                        { id: 3, type: 'connect', question: 'Conecta cada enunciado con la categoría exacta de su palabra destacada:', left1: 'La isla está muy lejos', right1: 'Adverbio de Tiempo.', left2: 'Llegaremos mañana', right2: 'Adverbio de Modo.', left3: 'Navegaba rápidamente', right3: 'Adverbio de Lugar.' },
+                        { id: 4, type: 'inline-gaps', question: 'Completa los nexos utilizando las palabras mezcladas de la lista: bajo, de, mañana', text: 'Saldremos [HUECO] hacia la isla misteriosa. El tesoro permanece oculto [HUECO] la arena, muy cerca [HUECO] la entrada.' },
+                        { id: 5, type: 'order', question: 'Ordena este tramo de la lista oficial de preposiciones por orden alfabético:', lines: ['A, ante, bajo', 'Cabe, con, contra', 'De, desde, durante'] },
+                        { id: 6, type: 'drawing', question: 'Dibuja un objeto situado "bajo" (preposición) una palmera que se encuentra "lejos" (adverbio):' }
                     ]
                 },
                 espacio: {
-                    titulo: 'Raíces Cósmicas', subtitulo: 'La Familia de Palabras en el Espacio', portada: 'RAÍCES ESTELARES', theme: 'naranja',
+                    titulo: 'Vuelo Invariable', subtitulo: 'Adverbios y Preposiciones de Control', portada: 'NEXOS CÓSMICOS', theme: 'rosa',
                     blocks: [
-                        { id: 1, type: 'learn', content: 'Todos los elementos de una misma familia de palabras llevan la misma raíz. Por ejemplo, de la raíz primitiva "astro" salen astrónomo, astronauta y astronomía.' },
-                        { id: 2, type: 'boxes', question: 'Clasifica las palabras según la estrella de la que provienen:', words: 'solar, soleado, parasol, lunático, alunizar, lunar', label1: 'FAMILIA: SOL', label2: 'FAMILIA: LUNA', label3: 'DATOS OK' },
-                        { id: 3, type: 'connect', question: 'Une la raíz espacial con sus derivadas correctas:', left1: 'De ESTRELLA derivamos:', right1: 'estrellado.', left2: 'De NUBE derivamos:', right2: 'nublado.', left3: 'De CIELO derivamos:', right3: 'celeste.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa usando la familia de ASTRO: astronave, astronauta, astronomía', text: 'El famoso [HUECO] estudió muchos libros de [HUECO] antes de conseguir pilotar su nueva [HUECO] brillante.' },
-                        { id: 5, type: 'order', question: 'Ordena desde la raíz primitiva hasta las palabras derivadas compuestas:', lines: ['Raíz: Tierra', 'Derivada: Terrestre', 'Derivada compuesta: Extraterrestre'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja el "sol" y algo de su familia como un "girasol" o un "parasol".' }
-                    ]
-                }
-            },
-            clases_sustantivos: {
-                piratas: {
-                    titulo: 'Tipos de Botín', subtitulo: 'Individuales y Colectivos', portada: 'CLASES DE SUSTANTIVOS', theme: 'azul',
-                    blocks: [
-                        { id: 1, type: 'learn', content: 'Los sustantivos pueden ser Individuales (nombran un solo ser: barco, isla) o Colectivos (nombran un grupo de cosas en singular: flota, archipiélago).' },
-                        { id: 2, type: 'boxes', question: 'Clasifica las palabras de nuestro mapa de navegación:', words: 'isla, archipiélago, barco, flota, músico, orquesta', label1: 'INDIVIDUALES (Uno)', label2: 'COLECTIVOS (Grupo)', label3: 'VERIFICADO' },
-                        { id: 3, type: 'connect', question: 'Une el sustantivo individual con su colectivo pirata:', left1: 'Conjunto de pájaros:', right1: 'bandada.', left2: 'Conjunto de peces:', right2: 'banco.', left3: 'Conjunto de barcos:', right3: 'flota.' },
-                        { id: 4, type: 'inline-gaps', question: 'Rellena con la lista exacta de colectivos: piara, archipiélago, tripulación', text: 'Nuestra valiente [HUECO] desembarcó en el [HUECO] de islas buscando un tesoro. Solo encontramos una [HUECO] de cerdos salvajes.' },
-                        { id: 5, type: 'order', question: 'Ordena de menos a más: de Individual a Colectivo y a Plural:', lines: ['Un pez solitario (Individual)', 'Un banco de peces (Colectivo singular)', 'Muchos bancos en el mar (Plural)'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja un pez (sustantivo individual) y un banco de peces (colectivo):' }
-                    ]
-                },
-                espacio: {
-                    titulo: 'Sustancias del Cosmos', subtitulo: 'Concretos y Abstractos', portada: 'TIPOS DE SUSTANTIVOS', theme: 'verde',
-                    blocks: [
-                        { id: 1, type: 'learn', content: 'Los sustantivos también pueden ser Concretos (se pueden tocar o ver: cohete, estrella) o Abstractos (son ideas o sentimientos: miedo, valentía, inteligencia).' },
-                        { id: 2, type: 'boxes', question: 'Clasifica los elementos encontrados durante la misión:', words: 'asteroide, miedo, planeta, valentía, alegría, radar', label1: 'CONCRETOS (Se ven)', label2: 'ABSTRACTOS (Ideas)', label3: 'DATOS OK' },
-                        { id: 3, type: 'connect', question: 'Une cada tripulante con el sustantivo abstracto que siente:', left1: 'El héroe espacial tiene', right1: 'valentía.', left2: 'Los monstruos oscuros dan', right2: 'miedo.', left3: 'Al aterrizar sanos sienten', right3: 'alegría.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa el reporte con la lista exacta: esperanza, cohete, tristeza', text: 'Al ver partir el enorme [HUECO], sentimos un poco de [HUECO]. Sin embargo, la [HUECO] de explorar nos animó a seguir.' },
-                        { id: 5, type: 'order', question: 'Ordena la secuencia lógica: Abstracto, Concreto, Colectivo:', lines: ['Amor (Abstracto)', 'Traje espacial (Concreto individual)', 'Constelación (Concreto colectivo)'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja un sustantivo concreto (planeta) y cómo pintarías algo abstracto (alegría):' }
-                    ]
-                }
-            },
-            determinantes_avanzados: {
-                piratas: {
-                    titulo: 'Marcando la Distancia', subtitulo: 'Demostrativos y Posesivos', portada: 'DETERMINANTES AL MANDO', theme: 'rosa',
-                    blocks: [
-                        { id: 1, type: 'learn', content: 'Los determinantes DEMOSTRATIVOS indican la distancia a la que está algo (este, ese, aquel) y los POSESIVOS indican a quién pertenece (mi, tu, su, nuestro).' },
-                        { id: 2, type: 'boxes', question: 'Clasifica los determinantes que usa el vigía:', words: 'este, nuestro, esa, mi, aquel, vuestro', label1: 'DEMOSTRATIVOS', label2: 'POSESIVOS', label3: 'REVISIÓN' },
-                        { id: 3, type: 'connect', question: 'Une para indicar la distancia correcta del objeto pirata:', left1: 'Cerca del capitán:', right1: "este barco.", left2: 'A media distancia:', right2: "esa gaviota.", left3: 'Muy lejos en el mar:', right3: "aquel tesoro." },
-                        { id: 4, type: 'inline-gaps', question: 'Usa la lista exacta para completar: mi, este, aquel', text: 'Voy a guardar [HUECO] espada dorada dentro de [HUECO] cofre de aquí, para que no se pierda en [HUECO] océano lejano.' },
-                        { id: 5, type: 'order', question: 'Ordena los determinantes de menor a mayor distancia:', lines: ['Este loro (Cerca)', 'Ese loro (Distancia media)', 'Aquel loro (Lejos)'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja "nuestro barco" a la izquierda y "aquella isla" a lo lejos a la derecha:' }
-                    ]
-                },
-                espacio: {
-                    titulo: 'Propiedad Galáctica', subtitulo: 'Demostrativos y Posesivos Espaciales', portada: 'COORDENADAS Y DUEÑOS', theme: 'naranja',
-                    blocks: [
-                        { id: 1, type: 'learn', content: 'Recuerda bien: Los DEMOSTRATIVOS marcan la distancia (este meteoro, aquella galaxia) y los POSESIVOS indican la pertenencia (mi casco, nuestra nave).' },
-                        { id: 2, type: 'boxes', question: 'Clasifica las palabras que aparecen en la pantalla central:', words: 'esta, mi, aquellos, tu, esas, su', label1: 'DEMOSTRATIVOS (Distancia)', label2: 'POSESIVOS (Dueño)', label3: 'SISTEMA' },
-                        { id: 3, type: 'connect', question: 'Une al astronauta correcto con su determinante posesivo:', left1: 'El traje es mío:', right1: 'mi traje.', left2: 'La nave es de todos:', right2: 'nuestra nave.', left3: 'El planeta es tuyo:', right3: 'tu planeta.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa usando la lista exacta: aquella, mi, nuestra', text: 'Desde [HUECO] cabina espacial, observo [HUECO] estrella lejana y pienso en [HUECO] gran misión en equipo.' },
-                        { id: 5, type: 'order', question: 'Ordena los determinantes según su función:', lines: ['Mi radar (Posesivo, 1 dueño)', 'Nuestro radar (Posesivo, varios dueños)', 'Ese radar (Demostrativo)'] },
-                        { id: 6, type: 'drawing', question: 'Representa "este planeta" (muy cerca) y "aquel planeta" (muy lejos):' }
-                    ]
-                }
-            },
-            tiempos_verbales: {
-                piratas: {
-                    titulo: 'El Reloj de Arena', subtitulo: 'Tiempos Verbales Avanzados', portada: 'EL TIEMPO CORSARIO', theme: 'azul',
-                    blocks: [
-                        { id: 1, type: 'learn', content: 'En el pasado usamos el Pretérito Imperfecto (acciones que duraban y acababan en -aba o -ía: navegaba) y el Pretérito Perfecto Simple (acciones terminadas de golpe: navegó).' },
-                        { id: 2, type: 'boxes', question: 'Clasifica los verbos que escribió el capitán en su diario:', words: 'buscaba, encontró, remaba, hundió, cantaba, saltó', label1: 'IMPERFECTO (-aba, -ía)', label2: 'PERFECTO SIMPLE', label3: 'REVISIÓN' },
-                        { id: 3, type: 'connect', question: 'Une cada marcador de tiempo con la forma verbal correcta:', left1: 'Ayer por la tarde, el barco', right1: 'navegó.', left2: 'Antes, durante meses, el vigía', right2: 'observaba.', left3: 'De repente, el pirata', right3: 'saltó.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa el cuento con la lista exacta: buscaba, gritó, corría', text: 'El marinero [HUECO] desesperadamente su loro. Cuando lo vio, [HUECO] muy fuerte de alegría mientras [HUECO] por la cubierta.' },
-                        { id: 5, type: 'order', question: 'Ordena cronológicamente los verbos del pasado:', lines: ['Había navegado (Pluscuamperfecto)', 'Navegaba (Imperfecto continuo)', 'Navegó (Perfecto terminado)'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja algo que el pirata "hacía" lentamente (dormía) y algo que "hizo" de golpe (saltó):' }
-                    ]
-                },
-                espacio: {
-                    titulo: 'Viajeros en el Tiempo', subtitulo: 'Tiempos Verbales Estelares', portada: 'MÁQUINA DEL TIEMPO', theme: 'rosa',
-                    blocks: [
-                        { id: 1, type: 'learn', content: 'En el panel controlamos el tiempo: usamos el Futuro (despegará) para lo que ocurrirá seguro, y el Condicional (despegaría) para algo que solo "podría" pasar si hay suerte.' },
-                        { id: 2, type: 'boxes', question: 'Clasifica los tiempos verbales en la computadora de abordo:', words: 'aterrizará, viajaría, flotará, descubriría, orbitará, dormiría', label1: 'FUTURO (-rá)', label2: 'CONDICIONAL (-ría)', label3: 'DATOS OK' },
-                        { id: 3, type: 'connect', question: 'Une cada situación espacial con su verbo adecuado:', left1: 'Mañana el cohete seguro que', right1: 'despegará.', left2: 'Si pudiera, el alienígena', right2: 'viajaría.', left3: 'En el año 3000, los humanos', right3: 'descubriremos.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa usando la lista exacta de predicciones: viajaría, orbitará, aterrizara', text: 'Si el satélite [HUECO] mal, la misión fracasaría. Mañana [HUECO] la Tierra con éxito y yo [HUECO] hasta allí para verlo.' },
-                        { id: 5, type: 'order', question: 'Ordena la evolución temporal del despegue:', lines: ['Despegué (Pasado terminado)', 'Despegaba (Pasado continuo)', 'Despegaré (Futuro seguro)'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja lo que la nave "hará" en el futuro (ej. aterrizará en un planeta nuevo):' }
+                        { id: 1, type: 'learn', content: 'Las palabras invariables no cambian de género ni número. Los adverbios aportan datos circunstanciales (arriba, mañana) y las preposiciones unen estructuras.' },
+                        { id: 2, type: 'boxes', question: 'Separa los comandos automáticos según su naturaleza léxica:', words: 'hacia, arriba, después, por, lentamente, sobre', label1: 'PREPOSICIONES', label2: 'ADVERBIOS LUGAR/TIEMPO', label3: 'ADVERBIOS DE MODO' },
+                        { id: 3, type: 'connect', question: 'Relaciona cruzando las opciones para identificar las funciones:', left1: 'Viajar sin gravedad', right1: 'Adverbio de Tiempo.', left2: 'Llegar pronto', right2: 'Adverbio de Modo.', left3: 'Pilotar estupendamente', right3: 'Preposición que denota carencia.' },
+                        { id: 4, type: 'inline-gaps', question: 'Completa la bitácora con los términos desordenados de la lista: aquí, sin, fácilmente', text: 'Hemos navegado [HUECO] combustible de reserva. Por suerte estamos seguros [HUECO] en la estación y recargaremos [HUECO].' },
+                        { id: 5, type: 'order', question: 'Sigue el orden: Preposición -> Adverbio de Lugar -> Adverbio de Modo:', lines: ['Por', 'Allí', 'Despacio'] },
+                        { id: 6, type: 'drawing', question: 'Dibuja una nave que se desplaza "hacia" (preposición) "arriba" (adverbio) en la pantalla:' }
                     ]
                 }
             }
         };
 
-        // El generador contextual ahora obtiene siempre datos reales de la base de datos superior
+        // GESTOR DE CONTEXTO ASÍNCRONO SEGURO
         function obtenerBancoContextual(contenido, tematica, tipo) {
             if (infoTematica[contenido] && infoTematica[contenido][tematica]) {
                 const b = infoTematica[contenido][tematica].blocks;
                 const match = b.find(x => x.type === tipo);
                 if (match) return JSON.parse(JSON.stringify(match));
             }
-            // En el improbable caso de fallo catastrófico de lectura JSON, 
-            // proporciona un respaldo genérico pero sin el texto "ejemplo 1".
-            return { type: tipo, question: 'Actividad de repaso general', content: 'Repasa el contenido curricular con atención.', lines: ['Primera fase de la misión completada.', 'Segunda fase en proceso de ejecución.', 'Tercera fase preparada para iniciar.'], words: 'palabra, concepto, término, idea', label1: 'GRUPO A', label2: 'GRUPO B', label3: 'REVISIÓN', left1: 'Dato A', right1: 'Respuesta A.', left2: 'Dato B', right2: 'Respuesta B.', left3: 'Dato C', right3: 'Respuesta C.', text: 'El astronauta completó su [HUECO] de forma exitosa utilizando la [HUECO] principal del [HUECO].' };
+            return { type: tipo, question: 'Actividad de consolidación didáctica', content: 'Analiza los elementos planteados en la cabecera.', lines: ['Fase inicial del proceso.', 'Fase intermedia de desarrollo.', 'Fase final de conclusiones.'], words: 'palabra, concepto, término, dato', label1: 'CATEGORÍA ALFA', label2: 'CATEGORÍA BETA', label3: 'REVISADO', left1: 'Enunciado Uno', right1: 'Respuesta Dos.', left2: 'Enunciado Dos', right2: 'Respuesta Tres.', left3: 'Enunciado Tres', right3: 'Respuesta Uno.', text: 'El equipo analizó el [HUECO] de forma minuciosa utilizando la herramienta del [HUECO] central en el [HUECO].' };
         }
 
         let currentTheme = 'azul';
@@ -689,10 +502,9 @@
                 changeTheme(plantilla.theme);
                 renderApp();
             } else {
-                // Generador en tiempo real combinando bloques
                 const titu = contenido.charAt(0).toUpperCase() + contenido.slice(1).replace(/_/g, ' ');
-                document.getElementById('in-titulo').value = `Misión de ${titu}`;
-                document.getElementById('in-subtitulo').value = `Trabajando los contenidos en un entorno de ${tematica} — ${nivelTexto}`;
+                document.getElementById('in-titulo').value = `Estudio de ${titu}`;
+                document.getElementById('in-subtitulo').value = `Contenidos de evaluación en el marco de los ${tematica} — ${nivelTexto}`;
                 document.getElementById('in-portada-titulo').value = `${titu.toUpperCase()} ${tematica.toUpperCase()}`;
                 
                 blocks = [
@@ -779,7 +591,7 @@
                 } else if (block.type === 'boxes') {
                     html += `
                         <input type="text" value="${block.question}" oninput="updateBlockValue(${block.id}, 'question', this.value)" class="w-full border-2 border-black p-1.5 rounded-lg font-bold text-xs">
-                        <input type="text" value="${block.words}" oninput="updateBlockValue(${block.id}, 'words', this.value)" class="w-full border p-1 rounded text-xs" placeholder="Palabras separadas por comas">
+                        <input type="text" value="${block.words}" oninput="updateBlockValue(${block.id}, 'words', this.value)" class="w-full border p-1 rounded text-xs">
                         <div class="grid grid-cols-3 gap-1">
                             <input type="text" value="${block.label1}" oninput="updateBlockValue(${block.id}, 'label1', this.value)" class="p-1 border rounded text-[10px]">
                             <input type="text" value="${block.label2}" oninput="updateBlockValue(${block.id}, 'label2', this.value)" class="p-1 border rounded text-[10px]">
@@ -789,7 +601,7 @@
                     html += `
                         <input type="text" value="${block.question}" oninput="updateBlockValue(${block.id}, 'question', this.value)" class="w-full border-2 border-black p-1.5 rounded-lg font-bold text-xs mb-1">
                         <div class="p-2 bg-purple-50 rounded-lg border border-purple-300 space-y-1">
-                            <div class="grid grid-cols-2 gap-1 text-[10px] font-bold text-purple-900 uppercase tracking-wider"><span>Izquierda</span><span>Derecha (Pareja)</span></div>
+                            <div class="grid grid-cols-2 gap-1 text-[10px] font-bold text-purple-900 uppercase tracking-wider"><span>Izquierda</span><span>Derecha (Desordenada)</span></div>
                             <div class="grid grid-cols-2 gap-1"><input type="text" class="p-1 text-xs border border-black rounded" value="${block.left1}" oninput="updateBlockValue(${block.id}, 'left1', this.value)"> <input type="text" class="p-1 text-xs border border-black rounded" value="${block.right1}" oninput="updateBlockValue(${block.id}, 'right1', this.value)"></div>
                             <div class="grid grid-cols-2 gap-1"><input type="text" class="p-1 text-xs border border-black rounded" value="${block.left2}" oninput="updateBlockValue(${block.id}, 'left2', this.value)"> <input type="text" class="p-1 text-xs border border-black rounded" value="${block.right2}" oninput="updateBlockValue(${block.id}, 'right2', this.value)"></div>
                             <div class="grid grid-cols-2 gap-1"><input type="text" class="p-1 text-xs border border-black rounded" value="${block.left3}" oninput="updateBlockValue(${block.id}, 'left3', this.value)"> <input type="text" class="p-1 text-xs border border-black rounded" value="${block.right3}" oninput="updateBlockValue(${block.id}, 'right3', this.value)"></div>
@@ -809,7 +621,7 @@
 
         function createNewPageMarkup(pageNum) {
             const pageDiv = document.createElement('div');
-            pageDiv.className = 'worksheet-preview shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] flex flex-col flex-shrink-0 mb-8';
+            pageDiv.className = 'worksheet-preview flex flex-col flex-shrink-0';
             
             const titleVal = document.getElementById('in-titulo') ? document.getElementById('in-titulo').value : '';
             const subtitleVal = document.getElementById('in-subtitulo') ? document.getElementById('in-subtitulo').value : '';
@@ -827,7 +639,7 @@
                 </header>
                 <div class="page-content-area flex-grow flex flex-col justify-start gap-6 overflow-hidden"></div>
                 <footer class="mt-auto flex justify-between font-display text-gray-400 border-t-2 border-black pt-2 text-xs flex-shrink-0">
-                    <span>Material Educativo Autorizado — @coleideando</span>
+                    <span>Material Educativo — @coleideando</span>
                     <span>Página ${pageNum}</span>
                 </footer>
             `;
@@ -842,7 +654,7 @@
 
             if (incluirPortada) {
                 const coverPageDiv = document.createElement('div');
-                coverPageDiv.className = 'worksheet-preview cover-page shadow-[15px_15px_0px_0px_rgba(0,0,0,1)]';
+                coverPageDiv.className = 'worksheet-preview cover-page';
                 
                 const dynamicCoverTitle = document.getElementById('in-portada-titulo') ? document.getElementById('in-portada-titulo').value : '';
                 
@@ -856,7 +668,6 @@
                             <h2 class="font-fredoka text-5xl text-black uppercase tracking-wider m-0">${dynamicCoverTitle}</h2> 
                         </div>
                     </div>
-
                     <div class="absolute top-[520px] left-[100px] right-[60px] flex flex-col gap-10">
                         <div class="flex items-center gap-6">
                             <div class="lollipop-icon"></div>
@@ -866,18 +677,7 @@
                             <div class="lollipop-icon"></div>
                             <p class="font-display text-3xl text-[#2c3e50] m-0 leading-tight">Estaría encantada de que lo usaras en tu aula y me menciones.</p>
                         </div>
-                        <div class="flex items-center gap-6">
-                            <div class="lollipop-icon"></div>
-                            <p class="font-display text-3xl text-[#2c3e50] m-0 leading-tight">No puede ser copiado o distribuido sin el consentimiento de la autora.</p>
-                        </div>
                     </div>
-
-                    <svg class="absolute bottom-12 left-12 w-[300px]" viewBox="0 0 120 70" fill="none">
-                        <path d="M 10 70 A 50 50 0 0 1 110 70" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"/>
-                        <path d="M 20 70 A 40 40 0 0 1 100 70" stroke="var(--lollipop-inner)" stroke-width="7" stroke-linecap="round"/>
-                        <path d="M 30 70 A 30 30 0 0 1 90 70" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
-                    </svg>
-
                     <div class="absolute bottom-12 right-12 bg-white/90 py-2 px-6 rounded-full border-2 border-black flex items-center gap-3 shadow-sm">
                         <span class="font-fredoka text-lg text-[#333]">@coleideando</span>
                     </div>
@@ -985,7 +785,6 @@
                 contentArea.appendChild(sec);
                 contentArea.getBoundingClientRect();
 
-                // LÍMITE REDUCIDO A 780px PARA EVITAR CORTES EN IMPRESORA A4 FÍSICA
                 if (contentArea.scrollHeight > 780) { 
                     if (contentArea.children.length > 1) {
                         contentArea.removeChild(sec);
@@ -1001,7 +800,6 @@
             });
         }
 
-        // Lanzamiento automático inicial con la nueva estructura
         actualizarContenidos();
         aplicarPlantillaTematica();
     </script>
