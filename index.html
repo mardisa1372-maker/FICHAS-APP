@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Coleideando - Generador Multi-Página Pro con Portada</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet" />
@@ -24,6 +24,7 @@
     </script>
 
     <style>
+        /* --- ESTILOS PARA ORDENADOR (ESCRITORIO) --- */
         .worksheet-preview {
             width: 794px;
             height: 1123px;
@@ -72,6 +73,46 @@
         .bg-grid-dots { background-image: radial-gradient(#d1d5db 1.5px, transparent 1.5px); background-size: 16px 16px; }
         .bg-lines { background-image: linear-gradient(#e2e8f0 1px, transparent 1px); background-size: 100% 24px; }
 
+        /* --- NUEVO: DETECCIÓN Y ADAPTACIÓN AUTOMÁTICA PARA MÓVILES --- */
+        @media (max-width: 1024px) {
+            body {
+                flex-direction: column !important;
+                overflow-y: auto !important;
+                height: auto !important;
+            }
+            aside {
+                width: 100% !important;
+                height: auto !important;
+                max-height: 55vh; /* Evita que el menú tape toda la pantalla del móvil */
+                border-right: none !important;
+                border-bottom: 4px solid black !important;
+            }
+            main {
+                width: 100% !important;
+                height: auto !important;
+                padding: 16px 8px !important;
+                overflow-x: hidden !important;
+            }
+            #capture-area {
+                gap: 16px !important;
+            }
+            /* Escalamos la hoja exactamente en miniatura para mantener las proporciones A4 idénticas en el móvil */
+            .worksheet-preview {
+                width: 794px !important;
+                height: 1123px !important;
+                zoom: 0.44 !important; /* Escala ideal para vista móvil estándar */
+                box-shadow: 6px 6px 0px 0px rgba(0,0,0,1) !important;
+                margin-bottom: 0px !important;
+            }
+            /* Ajuste extra milimétrico para pantallas muy compactas como el iPhone SE */
+            @media (max-width: 380px) {
+                .worksheet-preview {
+                    zoom: 0.39 !important;
+                }
+            }
+        }
+
+        /* --- CONFIGURACIÓN DE IMPRESIÓN --- */
         @page {
             size: A4 portrait;
             margin: 0 !important;
@@ -108,6 +149,7 @@
             .worksheet-preview {
                 width: 210mm !important;  
                 height: 297mm !important;
+                zoom: 1 !important; /* Al imprimir, cancela el tamaño miniatura del móvil */
                 border: none !important;  
                 box-shadow: none !important;
                 margin: 0 !important;
@@ -141,7 +183,7 @@
                 <h1 class="font-fredoka text-xl uppercase italic">Coleideando Studio</h1>
             </div>
             <button onclick="window.print()" class="bg-green-500 text-white font-fredoka py-2 px-4 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black hover:translate-y-0.5 hover:shadow-none transition-all uppercase tracking-wider text-xs">
-                <i class="fa-solid fa-print mr-1"></i> Imprimir PDF
+                <i class="fa-solid fa-print mr-1"></i> PDF
             </button>
         </div>
 
@@ -275,14 +317,12 @@
             });
         }
 
-        // BASE DE DATOS SIN PISTAS: Huecos desordenados y Uniones cruzadas (L1->R3, L2->R1, L3->R2)
         const infoTematica = {
-            // ========================= 1º Y 2º PRIMARIA =========================
             sustantivos: {
                 piratas: {
                     titulo: 'El Tesoro de las Palabras', subtitulo: '¡Al abordaje de los Sustantivos!', portada: 'SUSTANTIVOS PIRATAS', theme: 'naranja',
                     blocks: [
-                        { id: 1, type: 'learn', content: '¡Hola, grumete! Los sustantivos son palabras mágicas que sirven para nombrar a personas, animales, lugares y objetos de nuestro mundo pirata.' },
+                        { id: 1, type: 'learn', content: '¡Hola, grumete! Los academicismo son palabras mágicas que sirven para nombrar a personas, animales, lugares y objetos de nuestro mundo pirata.' },
                         { id: 2, type: 'boxes', question: 'Clasifica estos nombres en su cofre correspondiente:', words: 'catalejo, Garrapata, tiburón, calavera, pirata, isla', label1: 'LUGAR / PERSONA', label2: 'ANIMALES', label3: 'OBJETOS' },
                         { id: 3, type: 'connect', question: 'Une cada tripulante con el sustantivo que busca:', left1: 'El capitán busca su', right1: 'mástil.', left2: 'El cocinero limpia el', right2: 'brújula.', left3: 'El grumete sube al', right3: 'caldero.' },
                         { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras de la lista: isla, barco, pirata', text: 'El malvado [HUECO] Pata de Palo abordó el [HUECO] por la noche. Buscaba un mapa secreto para encontrar la [HUECO] escondida.' },
@@ -394,7 +434,7 @@
                         { id: 3, type: 'connect', question: 'Une los nombres con su pronombre espacial ideal:', left1: 'Tomás y Lucas', right1: 'Ella.', left2: 'La comandante Julia', right2: 'Vosotros.', left3: 'Tú y tu amigo', right3: 'Ellos.' },
                         { id: 4, type: 'inline-gaps', question: 'Completa utilizando las palabras exactas de esta lista: yo, nosotros, tú', text: '¡Cambio! [HUECO] estamos listos para descender de la cabina. ¿[HUECO] nos escuchas bien desde la base porque [HUECO] vigilo el motor?' },
                         { id: 5, type: 'order', question: 'Ordena de mayor cantidad de personas implicadas a menos:', lines: ['Nosotros viajamos juntos', 'Ellos exploran la zona', 'Yo vigilo el panel central'] },
-                        { id: 6, type: 'drawing', question: 'Dibuja la acción descrita por el pronombre "Yo" a la izquierda y "Ellas" a la derecha:' }
+                        { id: 6, type: 'drawing', question: 'Dibuja la action descrita por el pronombre "Yo" a la izquierda y "Ellas" a la derecha:' }
                     ]
                 }
             },
@@ -494,8 +534,6 @@
                     ]
                 }
             },
-
-            // ========================= 3º Y 4º PRIMARIA =========================
             sujeto_predicado: {
                 piratas: {
                     titulo: 'El Timón y el Destino', subtitulo: 'Separando el Sujeto y el Predicado', portada: 'SUJETO Y PREDICADO', theme: 'verde',
@@ -586,7 +624,7 @@
                         { id: 1, type: 'learn', content: 'Todos los elementos de una misma familia de palabras llevan la misma raíz. Por ejemplo, de la raíz primitiva "astro" salen astrónomo, astronauta y astronomía.' },
                         { id: 2, type: 'boxes', question: 'Clasifica las palabras según la estrella de la que provienen:', words: 'solar, soleado, parasol, lunático, alunizar, lunar', label1: 'FAMILIA: SOL', label2: 'FAMILIA: LUNA', label3: 'DATOS OK' },
                         { id: 3, type: 'connect', question: 'Une la raíz espacial con sus derivadas correctas:', left1: 'De ESTRELLA derivamos:', right1: 'nublado.', left2: 'De NUBE derivamos:', right2: 'celeste.', left3: 'De CIELO derivamos:', right3: 'estrellado.' },
-                        { id: 4, type: 'inline-gaps', question: 'Completa usando la familia de ASTRO: astronauta, astronomía, astronave', text: 'El famoso [HUECO] estudió muchos libros de [HUECO] antes de conseguir pilotar su nueva [HUECO] brillante.' },
+                        { id: 4, type: 'inline-gaps', question: 'Completa usando la familia de ASTRO: astronauta, astronomy, astronave', text: 'El famoso [HUECO] estudió muchos libros de [HUECO] antes de conseguir pilotar su nueva [HUECO] brillante.' },
                         { id: 5, type: 'order', question: 'Ordena desde la raíz primitiva hasta las palabras derivadas compuestas:', lines: ['Raíz: Tierra', 'Derivada: Terrestre', 'Derivada compuesta: Extraterrestre'] },
                         { id: 6, type: 'drawing', question: 'Dibuja el "sol" y algo de su familia como un "girasol" o un "parasol".' }
                     ]
@@ -664,8 +702,6 @@
                     ]
                 }
             },
-
-            // ========================= 5º Y 6º PRIMARIA (NUEVO NIVEL AVANZADO) =========================
             grados_adjetivo: {
                 piratas: {
                     titulo: 'Midiendo la Ferocidad', subtitulo: 'Los Grados del Adjetivo', portada: 'EL ADJETIVO PIRATA', theme: 'naranja',
@@ -768,7 +804,7 @@
                     blocks: [
                         { id: 1, type: 'learn', content: 'Los prefijos van antes de la raíz (sub-marino, des-hacer) y los sufijos van después (pirat-ería, marin-ero) para formar nuevas palabras.' },
                         { id: 2, type: 'boxes', question: 'Clasifica estas palabras de la caja de herramientas lingüística:', words: 'desenterrar, marinero, submarino, zapatería, predecir, oleaje', label1: 'TIENEN PREFIJO', label2: 'TIENEN SUFIJO', label3: 'ANÁLISIS' },
-                        { id: 3, type: 'connect', question: 'Une el morfema con el significado que aporta a la palabra pirata:', left1: 'El prefijo des- (desatar)', right1: 'Significa "debajo de".', left2: 'El prefijo sub- (submarino)', right2: 'Significa "profesión u oficio".', left3: 'El sufijo -ero (marinero)', right3: 'Significa "acción contraria".' },
+                        { id: 3, type: 'connect', question: 'Une el morfema con el significado que aporta a la palabra pirata:', left1: 'El prefijo des- (desatar)', right1: 'Significa "debajo de".', left2: 'El prefijo sub- (submarino)', right2: 'Significa "profesión u oficio".', left3: 'El sufijo -ero (marinero)', right3: 'Significa "action contraria".' },
                         { id: 4, type: 'inline-gaps', question: 'Completa utilizando la lista exacta: submarino, marinero, desenterrar', text: 'Para sacar el cofre hay que [HUECO] todo el lugar. Luego, el valiente [HUECO] se escapó buceando con el [HUECO].' },
                         { id: 5, type: 'order', question: 'Ordena el proceso de formación de una palabra con prefijo y sufijo:', lines: ['Raíz: Mar', 'Con Sufijo: Marinero', 'Con Prefijo y Sufijo: Submarinista'] },
                         { id: 6, type: 'drawing', question: 'Dibuja la acción opuesta usando el prefijo "des-": Un pirata "enterrando" y otro "desenterrando".' }
@@ -889,7 +925,6 @@
                 document.getElementById('in-subtitulo').value = plantilla.subtitulo + ' — ' + nivelTexto;
                 document.getElementById('in-portada-titulo').value = plantilla.portada;
                 blocks = JSON.parse(JSON.stringify(plantilla.blocks));
-                changeTheme(plantilla.theme);
                 renderApp();
             } else {
                 const titu = contenido.charAt(0).toUpperCase() + contenido.slice(1).replace(/_/g, ' ');
